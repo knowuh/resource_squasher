@@ -24,26 +24,22 @@ describe FileEntry do
   
 
   it "should calculate unque names" do
-    expected_name = "00_root_test.js"
+    expected_name = "js/00_this_test.js"
     @file_entry.name.should == expected_name
     
-    exptected_name = "00_root_a_test.js"
+    exptected_name = "js/00_this_a_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == exptected_name
     
-    expected_name = "00_root_is_a_test.js"
+    expected_name = "js/00_this_is_a_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == expected_name
     
-    expected_name = "00_root_this_is_a_test.js"
+    expected_name = "js/01_this_is_a_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == expected_name
     
-    expected_name = "00_root_directory_this_is_a_test.js"
-    @file_entry.more_uniq
-    @file_entry.name.should == expected_name
-    
-    expected_name = "01_root_directory_this_is_a_test.js"
+    expected_name = "js/02_this_is_a_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == expected_name
   end
@@ -64,7 +60,7 @@ describe FileEntry do
       "#{p2}" <img src="#{p2}"/> #{n2}
       #{p2}#{p2}#{p2}
     EOF
-    @file_entry.replace_content(test_content).should == expected
+    @file_entry.replace_content(test_content,{p1=>p2,n1=>n2}).should == expected
   end
 end
 
@@ -91,26 +87,6 @@ describe FileMapper do
     end
   end
 
-  describe "output_dir_for(resource)" do
-    it "should return #{@outdir}/images for images" do
-      @file_mapper.output_dir_for("/static/thing/big/foo.jpg").should == "#{@outdir}/images"
-      @file_mapper.output_dir_for("/static/thing/big/foo.gif").should == "#{@outdir}/images"
-      @file_mapper.output_dir_for("/static/thing/big/foo.png").should == "#{@outdir}/images"
-    end
-    it "should return #{@outdir}/js for javascript" do
-      @file_mapper.output_dir_for("/static/thing/big/foo.js").should == "#{@outdir}/js"
-      @file_mapper.output_dir_for("/static/thing/big/foo.json").should == "#{@outdir}/js"
-    end
-    it "should return #{@outdir}/html for html" do
-      @file_mapper.output_dir_for("/static/thing/big/foo.html").should == "#{@outdir}/html"
-    end
-    it "should return #{@outdir}/css for css" do
-      @file_mapper.output_dir_for("/static/thing/big/foo.css").should == "#{@outdir}/css"
-    end
-    it "should return /out for misc files" do
-      @file_mapper.output_dir_for("/static/thing/big/foo.txt").should == "#{@outdir}"
-    end
-  end
 
   describe "add_file(resource)" do
     
