@@ -1,15 +1,15 @@
 module ResourceSquasher
   def self.path_to_here
-    realpath = File.expand_path(__FILE__)
-    path,this = File::split(realpath)
-    return path
+    #realpath = File.expand_path(__FILE__)
+    #path,this = File::split(realpath)
+    return Dir.getwd
   end
   
 
   DEFAULT_LANGUAGE     = "en"
   DEFAULT_PROJECT_NAME = "my_system"
   DEFAULT_REZ_BASE     = "static"
-  DEFAULT_BUILD_DIR    = File.join(self.path_to_here,"tmp","build")
+  DEFAULT_source_dir   = File.join(self.path_to_here,"tmp","build")
   DEFAULT_OUTPUT_DIR   = File.join(self.path_to_here,"tmp", "squashed_build")
 
 
@@ -93,8 +93,8 @@ module ResourceSquasher
   class FileMapper
     attr_accessor :old_names
     attr_accessor :new_names
-    attr_accessor :rez_output_dir
-    attr_accessor :build_dir
+    attr_accessor :rez_base
+    attr_accessor :source_dir
     attr_accessor :output_dir
     attr_accessor :match_types
 
@@ -110,12 +110,12 @@ module ResourceSquasher
     def initialize(opts = {})
       self.old_names      = {}
       self.new_names      = {}
-      self.rez_output_dir = opts[:rez_output_dir] || DEFAULT_REZ_BASE
+      self.rez_base = opts[:rez_base] || DEFAULT_REZ_BASE
       self.output_dir     = opts[:output_dir]     || DEFAULT_OUTPUT_DIR
-      self.build_dir      = opts[:build_dir]      || DEFAULT_BUILD_DIR
+      self.source_dir      = opts[:source_dir]      || DEFAULT_source_dir
       self.match_types    = FileMapper.default_match_tpyes.merge!(opts[:match_types] || {})
 
-      raise "can't find the ouput directory #{self.build_dir}" unless File.exists?(self.build_dir)
+      raise "can't find the ouput directory #{self.source_dir}" unless File.exists?(self.source_dir)
       self.create_output_dir
     end
 
@@ -137,8 +137,8 @@ module ResourceSquasher
     end
 
     def add_file(_rez)
-      raise "Cant add #{_rez} -- not routed in #{self.rez_output_dir}" unless _rez =~ /#{self.rez_output_dir}/
-      newEntry = FileEntry.new(_rez,self.build_dir,self.output_dir_for(_rez))
+      raise "Cant add #{_rez} -- not routed in #{self.rez_base}" unless _rez =~ /#{self.rez_base}/
+      newEntry = FileEntry.new(_rez,self.source_dir,self.output_dir_for(_rez))
       # skip it if we already have it
       unless self.old_names.has_key?(newEntry.old_name)
         while (self.new_names.has_key?(newEntry.name))
@@ -151,28 +151,37 @@ module ResourceSquasher
   end
 
   class ResourceSquasher
-    attr_accessor :build_dir
+    attr_accessor :source_dir
     attr_accessor :project_name
-    attr_accessor :soure_html
+    attr_accessor :rez_base
     attr_reader   :file_mapper
 
     def initialize(_opts={})
       defaults = {
-        :build_dir      => DEFAULT_BUILD_DIR,
-        :project_name   => DEFAULT_PROJECT_NAME,
-        :output_dir     => DEFAULT_OUTPUT_DIR
+        :source_dir   => DEFAULT_source_dir,
+        :project_name => DEFAULT_PROJECT_NAME,
+        :output_dir   => DEFAULT_OUTPUT_DIR,
+        :rez_base     => DEFAULT_REZ_BASE
       }
-      self.file_mapper = FileMapper.new(opts)
-      self.build_dir = opts[:build_dir] || DEFAULT_BUILD_DIR
-      self.project_name = opts[:project_name] || DEFAULT_PROJECT_NAME
+      opts              = defaults.merge(_opts)
+      self.output_dir   = opts[:output_dir]
+      self.source_dir   = opts[:source_dir]
+      self.project_name = opts[:project_name]
+      self.rez_base     = opts[:rez_base]
+      self.file_mapper  = FileMapper.new(opts)
     end
 
+    def project_dir(lang = "en")
+      File.join(self.source_dir,self.rez_base,self.project,lang)
+    end
+    
     #  tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a7/
-    def most_recent_project_dir
-      parent_dir = Dir.new()
-      files = self.entries.collect { |file| self+file }.sort { |file1,file2| file1.mtime <=> file2.mtime }
-      files.reject! { |file| ((file.file? and file.to_s =~ matching) ? false : true) }
-      files.last
+    def most_recent_project_html
+      matchign = "[a-z|0-9]{40}" #TODO: This signature should be valid against sporoutcore
+      parent_dir = Dir.new(project_dir)
+      builds = self.entries.collect { |file| self+file }.sort { |file1,file2| file1.mtime <=> file2.mtime }
+      builds.reject! { |file| ((file.file? and file.to_s =~ matching) ? false : true) }
+      return File.join(builds.last,"index.html")
     end
   end
 end

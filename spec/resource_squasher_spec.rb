@@ -1,12 +1,10 @@
 $LOAD_PATH << File.dirname(__FILE__)
-$LOAD_PATH << File.join(File.dirname(__FILE__), "../lib"
-#$LOAD_PATH << File.join(File.dirname(__FILE__), "helpers"
-
+$LOAD_PATH << File.join(File.dirname(__FILE__), "../lib")
 require 'resource_squasher'
 require 'fakefs/spec_helpers'
-#require 'fakefs_mods'
+include  ResourceSquasher
 
-describe ResourceSquasher::FileEntry do
+describe FileEntry do
   before(:each) do
     @base = "/root/directory"
     @old_rez  = "/this/is/a/test.js"
@@ -70,18 +68,18 @@ describe ResourceSquasher::FileEntry do
   end
 end
 
-describe ResourceSquasher::FileMapper do
+describe FileMapper do
   include FakeFS::SpecHelpers
   before(:each) do
     @outdir = "/tmp/out"
-    @build_dir = "/tmp/build_it"
+    @source_dir = "/tmp/build_it"
     @rez_base = "/static"
     # use FakeFS to setup fake files needed
     FileUtils.mkdir_p @outdir
-    FileUtils.mkdir_p @build_dir
+    FileUtils.mkdir_p @source_dir
     @opts = {
       :output_dir => @outdir,
-      :build_dir =>  @build_dir,
+      :source_dir =>  @source_dir,
       :rez_base => @static
     }
     @file_mapper = FileMapper.new(@opts)
