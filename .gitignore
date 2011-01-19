@@ -1,0 +1,3 @@
+.bundle/config
+.rvmrc
+Gemfile.lock
