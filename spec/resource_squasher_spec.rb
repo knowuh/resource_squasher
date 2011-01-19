@@ -147,7 +147,65 @@ describe FileMapper do
         @file_mapper.old_names[file.old_name].should == file
       end
     end
+  end
+end
+describe ResourceSquasher do
+  def destroy_tmp_directory
+    # this is kinda dangerous but I can't seem to play nicely with FakeFS.
+    %x[rm -r tmp/build]
+  end
 
+  before(:each) do
+    destroy_tmp_directory
+    @source_dir = "tmp/build"
+    FileUtils.mkdir_p @source_dir
+    @rez_base     = "static"
+    @project_name = "my_system"
+    @opts =  {
+      :source_dir   => @source_dir,
+      :rez_base     => @rez_base,
+      :project_name => @project_name
+    }
+  end
+  describe "project_dir(language)" do
+    it "should return the projects build directory" do
+      squasher  = ResourceSquasher::ResourceSquasher.new(@opts)
+      squasher.project_dir.should match [@source_dir,@rez_base,@project_name,'en'].join("/")
+    end
+  end
+  describe "most_recent_project_html" do
+    it "should find a built project when it exists..." do
+      build_path = "tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a7"
+      expected_index = File.join(build_path,"index.html")
+      FileUtils.mkdir_p build_path
+      File.new(expected_index,"w") # create the index.html file required
+      squasher  = ResourceSquasher::ResourceSquasher.new(@opts)
+      squasher.most_recent_project_html.should match expected_index
+    end
+
+    it "should return the most recent build directory" do
+      old_build_path = "tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a7"
+      new_build_path = "tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a8"
+      old_index = File.join(old_build_path,"index.html")
+      new_index = File.join(new_build_path,"index.html")
+      FileUtils.mkdir_p old_build_path
+      File.new(old_index,"w") # create the index.html file required
+      # ugly! we should mock time
+      sleep 0.5
+      FileUtils.mkdir_p new_build_path
+      File.new(new_index,"w") # create the index.html file required
+      squasher  = ResourceSquasher::ResourceSquasher.new(@opts)
+      squasher.most_recent_project_html.should match new_index
+      squasher.most_recent_project_html.should_not match old_index
+    end
+
+    it "should fail when there is no project directory" do
+      squasher = ResourceSquasher::ResourceSquasher.new(@opts)
+      danger = lambda {
+        squasher.most_recent_project_html.should match expected_index
+      }
+      danger.should raise_error
+    end
   end
 end
 
