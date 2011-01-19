@@ -47,9 +47,6 @@ module ResourceSquasher
     def replace_content(content,replacements)
       return content unless self.textfile
       replacements.each_pair do |old,new|
-        puts "================================="
-        puts "replacing: |#{old}| with |#{new}|"
-        puts "================================="
         content.gsub!(old,new)
       end
       return content
@@ -59,7 +56,6 @@ module ResourceSquasher
       old_content = File.read(self.old_path)
       content = replace_content(old_content,replacements)
       FileUtils.mkdir_p(File.dirname(self.new_path))
-      puts self.new_path
       File.open(self.new_path, "w") do |f|
         f.write(content)
       end
@@ -217,22 +213,18 @@ module ResourceSquasher
     end
 
     def load_resources(filename)
-      puts "loading resources from #{filename}"
       file = File.new(filename)
       content = file.read
       content.scan(resource_regex) do  |mgroup|
         resource = mgroup.first
         #TODO: return value for add_file is true if new file
         # and adding was successful
-        puts "adding resource #{resource}"
         if self.file_mapper.add_file(resource)
           added_file = self.file_mapper.old_names[resource]
           if resource =~ /[\.html|\.js|\.css|\.txt|\.json|\.htm]$/i
-            puts "next file: #{added_file.old_path}"
             self.load_resources(added_file.old_path)
           end
         else
-          puts "resource #{resource} has already been mapped"
         end
       end
     end
@@ -243,7 +235,6 @@ module ResourceSquasher
         replacements[record.old_name] = record.name
       end
       self.file_mapper.new_names.values.each do |record|
-        puts "--------------------------------------------------"
         record.resave(replacements)
       end
     end
