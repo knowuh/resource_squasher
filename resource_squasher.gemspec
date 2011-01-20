@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Noah Paessel"]
   s.email       = ["knowuh@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{rename and transform dependant file resources}
-  s.description = %q{rename and transform dependant file resources}
+  s.summary     = %q{rename and transform dependent file resources}
+  s.description = %q{rename and transform dependent file resources}
 
   s.rubyforge_project = "resource_squasher"
   s.add_dependency('bundler')
