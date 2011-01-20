@@ -1,4 +1,5 @@
 source :gemcutter
+gem "thor"
 
 group :test do
   gem "rspec"
