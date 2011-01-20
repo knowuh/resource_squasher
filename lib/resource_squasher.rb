@@ -1,8 +1,6 @@
 require 'FileUtils'
 module ResourceSquasher
   def self.path_to_here
-    #realpath = File.expand_path(__FILE__)
-    #path,this = File::split(realpath)
     return Dir.getwd
   end
 
