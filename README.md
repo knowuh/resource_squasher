@@ -2,7 +2,8 @@
 ## Resource Squasher
 
 Flattens and simplifies sproutcore builds, using relative links
-between nested resources.
+between nested resources. This project is distributed
+under the MIT License, see the file "LICENSE" in this directory.
 
 Requirements:
 
@@ -37,12 +38,15 @@ Using:
 eg:
     rezsquish squash --project_name=my_app --output_dir=built
 
+
 TODO:
     remove default project name, and ask for project name instead.
 
+
+
 ## Running tets (use bundler)
 
-You can run tests, they depend on FakeFS. Bunlder can help you, but you
+You can run tests, they depend on FakeFS. Bundler can help you, but you
 need to do it this way:
 
     bundle exec rspec ./spec/*_spec.rb
