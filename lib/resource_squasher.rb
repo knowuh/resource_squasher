@@ -1,4 +1,3 @@
-require 'FileUtils'
 module ResourceSquasher
   def self.path_to_here
     return Dir.getwd
