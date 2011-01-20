@@ -1,6 +1,3 @@
-#require 'FileUtils'
-#require 'resource_squasher/file_entry'
-
 module ResourceSquasher
   class FileMapper
     attr_accessor :old_names
@@ -8,7 +5,6 @@ module ResourceSquasher
     attr_accessor :rez_base
     attr_accessor :source_dir
     attr_accessor :output_dir
-
 
     def initialize(opts = {})
       self.old_names   = {}
@@ -23,13 +19,12 @@ module ResourceSquasher
     def create_output_dir
       begin
         unless File.exist?(self.output_dir)
-          FileUtils.mkdir_p(self.output_dir) 
+          FileUtils.mkdir_p(self.output_dir)
         end
       rescue
         throw "Couldn't create output directory #{self.output_dir}"
       end
     end
-
 
     def add_file(_rez)
       raise "Cant add #{_rez} -- not routed in #{self.rez_base}" unless (_rez =~ /#{self.rez_base}/)

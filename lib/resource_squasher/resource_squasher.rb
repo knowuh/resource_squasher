@@ -15,7 +15,6 @@ module ResourceSquasher
     end
 
     def initialize(_opts={})
-
       defaults = {
         :source_dir   => DEFAULT_SOURCE_DIR,
         :project_name => DEFAULT_PROJECT_NAME,
@@ -30,10 +29,11 @@ module ResourceSquasher
       self.file_mapper  = FileMapper.new(opts)
     end
 
+    # find the build directory for the sproutcore project self.project_name
     def project_dir(lang = "en")
       File.join(self.source_dir,self.rez_base,self.project_name,lang)
     end
-    
+
     #  tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a7/
     def most_recent_project_html
       matching = /[a-z|0-9]{40}/ #TODO: This signature is only valid against sproutcore builds.
@@ -43,14 +43,13 @@ module ResourceSquasher
       return File.join(builds.last,"index.html")
     end
 
+    # regex for resources which can be replaced
     def resource_regex
       /['|"]\s*(\/#{self.rez_base}\/[^"|^']*)['|"]/
     end
 
-    def match_resources(txt)
-      return txt.match resource_regex
-    end
-
+    # load resources, starting with index.html in the 
+    # sproutcore application defined by self.project_name
     def load_all
       html_path = self.most_recent_project_html
       html_resource = html_path.gsub(self.source_dir,"")
@@ -58,6 +57,7 @@ module ResourceSquasher
       load_resources(html_path)
     end
 
+    # Recursively load resources found in filename
     def load_resources(filename)
       file = File.new(filename)
       content = file.read
@@ -75,6 +75,7 @@ module ResourceSquasher
       end
     end
 
+    # rewrite the resource references in files, using new shorter names
     def rewrite_resources
       replacements = {}
       self.file_mapper.new_names.values.each do |record|

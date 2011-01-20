@@ -1,5 +1,3 @@
-#require 'FileUtils'
-
 module ResourceSquasher
   class FileEntry
     attr_accessor :old_base
@@ -30,7 +28,7 @@ module ResourceSquasher
       end
       return false
     end
-    
+
     def replace_content(content,replacements)
       return content unless self.textfile
       replacements.each_pair do |old,new|
@@ -48,11 +46,10 @@ module ResourceSquasher
       end
     end
 
-
     def join_char
       "_"
     end
-    
+
     def self.match_types
       {
         /\.jpg|png|gif$/i => 'images',
@@ -60,7 +57,7 @@ module ResourceSquasher
         /\.css$/i         => 'css',
       }
     end
-    
+
     def prefix
       FileEntry::match_types.each_pair do |regex,result|
         if self.old_name =~ regex
