@@ -1,7 +1,7 @@
 
 ## Resource Squasher
 
-Flattens and simplifies sproutcore output build direcotories,using relative links
+Flattens and simplifies sproutcore builds, using relative links
 between nested resources.
 
 Requirements:
