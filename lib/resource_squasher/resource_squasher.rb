@@ -15,8 +15,9 @@ module ResourceSquasher
     end
 
     def initialize(_opts={})
+
       defaults = {
-        :source_dir   => DEFAULT_source_dir,
+        :source_dir   => DEFAULT_SOURCE_DIR,
         :project_name => DEFAULT_PROJECT_NAME,
         :output_dir   => DEFAULT_OUTPUT_DIR,
         :rez_base     => DEFAULT_REZ_BASE

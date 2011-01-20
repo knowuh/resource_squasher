@@ -15,8 +15,7 @@ module ResourceSquasher
       self.new_names   = {}
       self.rez_base    = opts[:rez_base]   || DEFAULT_REZ_BASE
       self.output_dir  = opts[:output_dir] || DEFAULT_OUTPUT_DIR
-      self.source_dir  = opts[:source_dir] || DEFAULT_source_dir
-
+      self.source_dir  = opts[:source_dir] || DEFAULT_SOURCE_DIR
       raise "can't find the source directory #{self.source_dir}" unless File.exists?(self.source_dir)
       self.create_output_dir
     end
