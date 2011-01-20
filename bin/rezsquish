@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+$:.push File.expand_path("../../lib", __FILE__)
+#                                                      vim: syntax=ruby
+require 'rubygems'
+require 'thor'
+require 'resource_squasher'
+
+class App < Thor
+
+  desc "squash [PROJECT_NAME]", "repackage a sproutcore app"
+  method_options :source_dir => ResourceSquasher::DEFAULT_SOURCE_DIR,
+    :output_dir => ResourceSquasher::DEFAULT_OUTPUT_DIR,
+    :rez_base   => ResourceSquasher::DEFAULT_REZ_BASE,
+    :project_name => ResourceSquasher::DEFAULT_PROJECT_NAME
+    #:project_name => 'my_system'
+  def squash
+    opts={}
+    # NO STINKING STRINGS! 
+    options.each_pair do |k,v|
+      opts[k.to_sym]=v
+    end
+    ResourceSquasher::ResourceSquasher.squash_sproutcore_app(opts)
+  end
+
+
+  #desc "print [something]", "a simple test action"
+  #method_options :color => "red"
+  #def print(something="nothing to say")
+    #color = options[:color].to_sym
+    #say something, color
+  #end
+
+end
+App.start
