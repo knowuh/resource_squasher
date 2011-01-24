@@ -5,11 +5,15 @@ module ResourceSquasher
     attr_accessor :old_name
     attr_accessor :name
     attr_accessor :uniq_level
-    def initialize(_rez_path,_old_base,_new_base="/tmp")
+    attr_accessor :name_root
+    def initialize(_rez_path,_old_base,_name_root=nil,_new_base="/tmp")
       self.old_name = _rez_path
       self.old_base = _old_base
       self.base = _new_base
       self.uniq_level = 0
+      unless _name_root
+        _name_root = File.basemame(_rez_path)
+      end
       self.rename
     end
 
@@ -69,7 +73,7 @@ module ResourceSquasher
 
     def rename
       n_format = "%02d"
-      name = File.basename(self.old_path)
+      name = self.name_root
       self.name = [n_format % self.uniq_level,name].join(self.join_char)
       unless self.prefix.empty?
         self.name = [self.prefix,self.name].join(File::SEPARATOR)
