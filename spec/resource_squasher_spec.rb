@@ -24,18 +24,18 @@ describe FileEntry do
   
 
   it "should calculate unque names" do
-    expected_name = "js/00_test.js"
+    expected_name = "js/00_my_system_test.js"
     @file_entry.name.should == expected_name
     
-    exptected_name = "js/01_test.js"
+    exptected_name = "js/01_my_system_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == exptected_name
     
-    expected_name = "js/02_test.js"
+    expected_name = "js/02_my_system_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == expected_name
     
-    expected_name = "js/03_test.js"
+    expected_name = "js/03_my_system_test.js"
     @file_entry.more_uniq
     @file_entry.name.should == expected_name
   end

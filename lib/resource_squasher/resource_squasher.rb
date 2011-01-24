@@ -3,10 +3,26 @@
 module ResourceSquasher
   class ResourceSquasher
     attr_accessor :source_dir
-    attr_accessor :project_name
     attr_accessor :rez_base
     attr_accessor :file_mapper
     attr_accessor :output_dir
+
+    def self.initialize
+      @project_name = nil
+    end
+    
+    def self.project_name=(new_name)
+      if new_name
+        @project_name = new_name
+      end
+    end
+
+    def self.project_name
+      unless @project_name
+        @project_name = ResourceSquasher::DEFAULT_PROJECT_NAME
+      end
+      return @project_name
+    end
 
     def self.squash_sproutcore_app(opts={})
       squasher = ResourceSquasher.new(opts)
@@ -21,17 +37,17 @@ module ResourceSquasher
         :output_dir   => DEFAULT_OUTPUT_DIR,
         :rez_base     => DEFAULT_REZ_BASE
       }
-      opts              = defaults.merge(_opts)
-      self.output_dir   = opts[:output_dir]
-      self.source_dir   = opts[:source_dir]
-      self.project_name = opts[:project_name]
-      self.rez_base     = opts[:rez_base]
-      self.file_mapper  = FileMapper.new(opts)
+      opts                          = defaults.merge(_opts)
+      ResourceSquasher.project_name= opts[:project_name]
+      self.output_dir               = opts[:output_dir]
+      self.source_dir               = opts[:source_dir]
+      self.rez_base                 = opts[:rez_base]
+      self.file_mapper              = FileMapper.new(opts)
     end
 
     # find the build directory for the sproutcore project self.project_name
     def project_dir(lang = "en")
-      File.join(self.source_dir,self.rez_base,self.project_name,lang)
+      File.join(self.source_dir,self.rez_base,ResourceSquasher.project_name,lang)
     end
 
     #  tmp/build/static/my_system/en/67bd8352e47bfe3a4cabf92df08ef2022c7368a7/
