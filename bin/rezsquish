@@ -7,7 +7,7 @@ require 'resource_squasher'
 
 class App < Thor
 
-  desc "squash [PROJECT_NAME]", "repackage a sproutcore app"
+  desc "squash", "repackage a sproutcore app"
   method_options :source_dir => ResourceSquasher::DEFAULT_SOURCE_DIR,
     :output_dir => ResourceSquasher::DEFAULT_OUTPUT_DIR,
     :rez_base   => ResourceSquasher::DEFAULT_REZ_BASE,
