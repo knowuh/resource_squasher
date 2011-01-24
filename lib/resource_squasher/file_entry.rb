@@ -22,7 +22,7 @@ module ResourceSquasher
     end
     alias path new_path
 
-    def textfile
+    def textfile?
       if self.name =~ /[\.html|\.js|\.css|\.txt|\.json|\.htm]$/i
         return true
       end
@@ -30,7 +30,7 @@ module ResourceSquasher
     end
 
     def replace_content(content,replacements)
-      return content unless self.textfile
+      return content unless self.textfile?
       replacements.each_pair do |old,new|
         content.gsub!(old,new)
       end
