@@ -68,25 +68,9 @@ module ResourceSquasher
     end
 
     def rename
-      path_parts = self.old_name.split(File::SEPARATOR)
-      blank = path_parts.shift # leading slash
-      base = path_parts.shift
-      name = path_parts.pop
       n_format = "%02d"
-      remainder = 0
-      remainder = path_parts.size - self.uniq_level
-      remainder = remainder * -1
-      remainder = remainder < 0 ? 0 : remainder
-      last_index = path_parts.size
-      start_index= last_index - self.uniq_level
-      start_index = start_index < 0 ? 0 : start_index
-      middle = path_parts[start_index...last_index]
-      if middle && middle.size > 0
-        middle = middle.join(self.join_char)
-        self.name = [n_format % remainder,base,middle,name].join(self.join_char)
-      else
-        self.name = [n_format % remainder,base,name].join(self.join_char)
-      end
+      name = File.basename(self.old_path)
+      self.name = [n_format % self.uniq_level,name].join(self.join_char)
       unless self.prefix.empty?
         self.name = [self.prefix,self.name].join(File::SEPARATOR)
       end
