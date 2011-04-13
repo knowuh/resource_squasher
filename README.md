@@ -5,25 +5,31 @@ Flattens and simplifies sproutcore builds, using relative links
 between nested resources. This project is distributed
 under the MIT License, see the file "LICENSE" in this directory.
 
-Requirements:
+### Requirements:
 
 * bundler
 
-bundler should take of the rest.
+bundler should take care of the rest.
 
-Building:
+### Building:
     bundle install
     rake build
 
-Intalling:
+### Intalling:
     rake install
 
 or if you just have the gemfile somewhere:
     gem install /path/togemfile/resource_squasher-x.x.x.gem
 
 
-Using:
-      rezsquish squash [PROJECT_NAME]
+### Using in your Gemfile:
+    git "git://github.com/knowuh/resource_squasher.git" do
+      gem "resource_squasher"
+    end
+    
+
+## Using rezsquish:
+      <bundle exec> rezsquish squash [PROJECT_NAME]
 
     Options:
       [--source-dir=SOURCE_DIR]      
@@ -39,12 +45,12 @@ eg:
     rezsquish squash --project_name=my_app --output_dir=built
 
 
-TODO:
+## TODO:
     remove default project name, and ask for project name instead.
 
 
 
-## Running tets (use bundler)
+## Running tests (use bundler)
 
 You can run tests, they depend on FakeFS. Bundler can help you, but you
 need to do it this way:
