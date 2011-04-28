@@ -11,7 +11,8 @@ class App < Thor
   method_options :source_dir => ResourceSquasher::DEFAULT_SOURCE_DIR,
     :output_dir => ResourceSquasher::DEFAULT_OUTPUT_DIR,
     :rez_base   => ResourceSquasher::DEFAULT_REZ_BASE,
-    :project_name => ResourceSquasher::DEFAULT_PROJECT_NAME
+    :project_name => ResourceSquasher::DEFAULT_PROJECT_NAME,
+    :language => ResourceSquasher::DEFAULT_LANGUAGE
     #:project_name => 'my_system'
   def squash
     opts={}
