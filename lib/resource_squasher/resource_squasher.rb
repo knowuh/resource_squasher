@@ -61,7 +61,7 @@ module ResourceSquasher
 
     # regex for resources which can be replaced
     def resource_regex
-      /['|"]\s*(\/#{self.rez_base}\/[^"|^']*)['|"]/
+      /(?:['|"]|&quot;)\s*(\/#{self.rez_base}\/.*?)(?:['|"]|&quot;)/
     end
 
     # load resources, starting with index.html in the 
