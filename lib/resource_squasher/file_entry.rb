@@ -6,13 +6,21 @@ module ResourceSquasher
     attr_accessor :name
     attr_accessor :uniq_level
     attr_accessor :name_root
-    def initialize(_rez_path,_old_base,_new_base="/tmp")
+    
+    def initialize(_rez_path, _old_base, _new_base="/tmp", name=nil)
       self.old_name = _rez_path
       self.old_base = _old_base
       self.base = _new_base
       self.uniq_level = 0
       self.name_root = [ResourceSquasher.project_name, File.basename(_rez_path)].join(self.join_char)
-      self.rename
+      if name.nil?
+        self.rename 
+      else 
+        self.name = name
+        unless self.prefix.empty?
+          self.name = [self.prefix,self.name].join(File::SEPARATOR)
+        end
+      end
     end
 
     def old_path

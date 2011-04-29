@@ -26,9 +26,9 @@ module ResourceSquasher
       end
     end
 
-    def add_file(_rez)
+    def add_file(_rez, name=nil)
       raise "Cant add #{_rez} -- not routed in #{self.rez_base}" unless (_rez =~ /#{self.rez_base}/)
-      newEntry = FileEntry.new(_rez,self.source_dir,self.output_dir)
+      newEntry = FileEntry.new(_rez, self.source_dir, self.output_dir, name)
       # skip it if we already have it
       unless self.old_names.has_key?(newEntry.old_name)
         while (self.new_names.has_key?(newEntry.name))
