@@ -6,7 +6,7 @@ module ResourceSquasher
     attr_accessor :rez_base
     attr_accessor :file_mapper
     attr_accessor :output_dir
-    attr_accessor :index_name
+    attr_accessor :index_file
     attr_accessor :language
     attr_accessor :build_number
 
@@ -46,7 +46,7 @@ module ResourceSquasher
       self.source_dir               = opts[:source_dir]
       self.rez_base                 = opts[:rez_base]
       self.language                 = opts[:language]
-      self.index_name               = opts[:index_name]
+      self.index_file               = opts[:index_file]
       self.build_number             = `sc-build-number #{ResourceSquasher.project_name}`
       self.file_mapper              = FileMapper.new(opts)
     end
@@ -75,7 +75,7 @@ module ResourceSquasher
     def load_all
       html_path = self.most_recent_project_html
       html_resource = html_path.gsub(self.source_dir,"")
-      self.file_mapper.add_file(html_resource, "#{self.index_name}.html")
+      self.file_mapper.add_file(html_resource, "#{self.index_file}.html")
       load_resources(html_path)
     end
 
