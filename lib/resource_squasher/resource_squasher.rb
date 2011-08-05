@@ -8,7 +8,6 @@ module ResourceSquasher
     attr_accessor :output_dir
     attr_accessor :index_file
     attr_accessor :language
-    attr_accessor :build_number
 
     def self.initialize
       @project_name = nil
@@ -47,8 +46,21 @@ module ResourceSquasher
       self.rez_base                 = opts[:rez_base]
       self.language                 = opts[:language]
       self.index_file               = opts[:index_file]
-      self.build_number             = `sc-build-number #{ResourceSquasher.project_name}`
       self.file_mapper              = FileMapper.new(opts)
+    end
+
+
+    def build_number
+      return @build_number if @build_number
+      begin
+        # TODO: Really should decouple from sproutcore completely...
+        @build_number = `sc-build-number #{ResourceSquasher.project_name}`
+      rescue Exception => exp
+        $stderr.puts exp
+        $stderr.puts "either sc-build-number is not in your path, or #{ResourceSquasher.project_name} is undefined" 
+        $stderr.puts "No build number will be used."
+      end
+      @build_number = ''
     end
 
     # find the build directory for the sproutcore project self.project_name
