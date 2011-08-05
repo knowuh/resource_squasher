@@ -33,7 +33,7 @@ module ResourceSquasher
     alias path new_path
 
     def textfile?
-      if self.name =~ /[\.html|\.js|\.css|\.txt|\.json|\.htm]$/i
+      if self.name =~ /\.html|\.js|\.css|\.txt|\.json|\.htm$/i
         return true
       end
       return false

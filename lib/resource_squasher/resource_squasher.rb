@@ -106,16 +106,23 @@ module ResourceSquasher
       out.write(content)
       out.close
       
-      content.scan(resource_regex) do  |mgroup|
-        resource = mgroup.first
-        #TODO: return value for add_file is true if new file
-        # and adding was successful
-        if self.file_mapper.add_file(resource)
-          added_file = self.file_mapper.old_names[resource]
-          if resource =~ /[\.html|\.js|\.css|\.txt|\.json|\.htm]$/i
-            self.load_resources(added_file.old_path)
+      # skip binary resources
+      if filename =~ /\.html|\.js|\.css|\.txt|\.json|\.htm$/i
+        content.scan(resource_regex) do  |mgroup|
+          resource = mgroup.first
+          if resource =~ /__sc_chance_mhtml.txt!__/
+            $stderr.puts "skipping dynamic expression resource: #{resource}"
+            next
           end
-        else
+          #TODO: return value for add_file is true if new file
+          # and adding was successful
+          if self.file_mapper.add_file(resource)
+            added_file = self.file_mapper.old_names[resource]
+            if resource =~ /\.html|\.js|\.css|\.txt|\.json|\.htm$/i
+              self.load_resources(added_file.old_path)
+            end
+          else
+          end
         end
       end
     end
